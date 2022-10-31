@@ -3,20 +3,22 @@ var blockSize = 25;
 var rows = 20;
 var cols = 20;
 var board;
-var context;
+var context; 
 
-//snakes head
-var snakeX = 0;
-var snakeY = 0;
+//snake head
+var snakeX = blockSize * 5;
+var snakeY = blockSize * 5;
 
 var velocityX = 0;
 var velocityY = 0;
 
-var snakeBody = []
+var snakeBody = [];
 
 //food
-var foodX = blockSize * 10;
-var foodY = blockSize * 10;
+var foodX;
+var foodY;
+
+var gameOver = false;
 
 window.onload = function() {
     board = document.getElementById("board");
@@ -25,31 +27,54 @@ window.onload = function() {
     context = board.getContext("2d"); //used for drawing on the board
 
     placeFood();
-    document.addEventListener("keyup", changeDirection)
-    //update();
-    setInterval(update, 1000/10);//100 milliseconds
+    document.addEventListener("keyup", changeDirection);
+    // update();
+    setInterval(update, 1000/10); //100 milliseconds
 }
 
 function update() {
-    context.fillStyle = "black";
+    if (gameOver) {
+        return;
+    }
+
+    context.fillStyle="black";
     context.fillRect(0, 0, board.width, board.height);
 
-    context.fillStyle = "blue";
+    context.fillStyle="red";
     context.fillRect(foodX, foodY, blockSize, blockSize);
 
     if (snakeX == foodX && snakeY == foodY) {
-        snakeBody.push([foodX, foodY])
+        snakeBody.push([foodX, foodY]);
         placeFood();
     }
 
-    context.fillStyle = "lime";
+    for (let i = snakeBody.length-1; i > 0; i--) {
+        snakeBody[i] = snakeBody[i-1];
+    }
+    if (snakeBody.length) {
+        snakeBody[0] = [snakeX, snakeY];
+    }
+
+    context.fillStyle="lime";
     snakeX += velocityX * blockSize;
     snakeY += velocityY * blockSize;
     context.fillRect(snakeX, snakeY, blockSize, blockSize);
     for (let i = 0; i < snakeBody.length; i++) {
-        context.fillRect(snakeBody[i][0], snakeBody[i][1], blockSize, blockSize)
+        context.fillRect(snakeBody[i][0], snakeBody[i][1], blockSize, blockSize);
     }
 
+    //game over conditions
+    if (snakeX < 0 || snakeX > cols*blockSize || snakeY < 0 || snakeY > rows*blockSize) {
+        gameOver = true;
+        alert("Game Over");
+    }
+
+    for (let i = 0; i < snakeBody.length; i++) {
+        if (snakeX == snakeBody[i][0] && snakeY == snakeBody[i][1]) {
+            gameOver = true;
+            alert("Game Over");
+        }
+    }
 }
 
 function changeDirection(e) {
@@ -70,6 +95,7 @@ function changeDirection(e) {
         velocityY = 0;
     }
 }
+
 
 function placeFood() {
     //(0-1) * cols -> (0-19.9999) -> (0-19) * 25
