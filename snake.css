@@ -1,4 +1,14 @@
+* {
+    background-color: aquamarine;
+}
+
 body {
     font-family: 'Times New Roman', Times, serif;
     text-align: center;
+}
+
+h1 {
+    font-size: 2rem;
+    font-style: oblique;
+    color: rgba(0, 0, 0, 0.75);
 }
