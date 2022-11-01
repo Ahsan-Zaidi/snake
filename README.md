@@ -32,10 +32,6 @@ I have created the popular snake game through basic HTML, CSS and Javascript. It
 
 ✋ [GitHub Repository](https://github.com/Ahsan-Zaidi/snake)
 
-
-✋ [Deployed App]()
-
-
 ## ✋User Story
 
 I WANT create a simple skill based game SO THAT the user can experience a classic game from a past era.
